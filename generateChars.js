@@ -63,21 +63,21 @@ const QUERY_CONFIG = {
   },
   natureAffinity: {
     prompt: (charDescription) =>
-      `What Naruto-style chakra nature affinities would ${charDescription} have? Low rank characters should have 1-2 affinities, while high rank characters can have 3-4 affinities. Return as a comma separated list. No other text or explanation.`,
+      `What Naruto-style chakra nature affinities would ${charDescription} have? Low rank characters should have 1-2 affinities, while high rank characters can have 3-4 affinities. Return as a list with each on a new line. No other text or explanation.`,
     schema: zNatureAffinity,
     model: "gpt-4o-mini",
     max_tokens: 100,
   },
   uniqueAbilities: {
     prompt: (charDescription) =>
-      `List unique jutsus or abilities that ${charDescription} would have in the Naruto world. Low rank characters should have 1-2 abilities, while high rank characters can have 3-4 abilities. Return as a comma separated list. No other text or explanation.`,
+      `List unique jutsus or abilities that ${charDescription} would have in the Naruto world. Low rank characters should have 1-2 abilities, while high rank characters can have 3-4 abilities. Return as a list with each on a new line. No other text or explanation.`,
     schema: zUniqueAbilities,
     model: "gpt-4o-mini",
     max_tokens: 100,
   },
   feats: {
     prompt: (charDescription) =>
-      `Describe notable feats or accomplishments of ${charDescription} in the Naruto world. Low rank characters should have 1-2 feats, while high rank characters can have 3-4 feats. Return as a list, where each feat/accomplishment is separated by a newline. No other text or explanation.`,
+      `Describe notable feats or accomplishments of ${charDescription} in the Naruto world. Low rank characters should have 1-2 feats, while high rank characters can have 3-4 feats. Return as a list with each on a new line. No other text or explanation.`,
     schema: zFeats,
     model: "gpt-4o-mini",
     max_tokens: 200,
@@ -117,7 +117,7 @@ const callWithRetry = async (
       // Try to parse response
       if (zArray.includes(schema)) {
         // regex: split by comma or newline, and filter out empty strings
-        const parsed = text.split(/,\s*|\n/).filter(Boolean);
+        const parsed = text.split(/\n/).filter(Boolean);
         console.log(`schema array:`, parsed);
         return schema.parse(parsed);
       }
