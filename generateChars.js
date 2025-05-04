@@ -120,9 +120,14 @@ const callWithRetry = async (
       if (zArray.includes(schema)) {
         // regex: split by comma or newline, and filter out empty strings
         const parsed = text.split(/\n/).filter(Boolean);
-        console.log(`schema array:`, parsed);
-        return schema.parse(parsed);
+
+        // clean array content; remove "- " prefix and trim whitespace
+        const cleaned = parsed.map((item) => item.trim().replace(/^- /, ""));
+
+        console.log(`schema array:`, cleaned);
+        return schema.parse(cleaned);
       }
+
       console.log(`schema text:`, text);
       return schema.parse(text);
     } catch (e) {
