@@ -1,20 +1,12 @@
 import express from "express";
+import { generateCharacters } from "./generateChars.js";
 
 const app = express();
 const PORT = 3000;
 
 let server;
 
-// Simulated async task: returns name with delay
-const asyncTask = async (name) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(`Processed: ${name}`);
-    }, 500); // simulate 500ms delay
-  });
-};
-
-app.get("/fantasy", async (req, res) => {
+app.get("/naruto", async (req, res) => {
   const namesParam = req.query.names;
 
   // error handling: missing query parameters
@@ -25,9 +17,12 @@ app.get("/fantasy", async (req, res) => {
   const names = namesParam.split(",").map((name) => name.trim());
 
   try {
-    const results = await Promise.all(names.map(asyncTask));
-    console.log("Results:", results);
-    res.json(results); // responds with a JSON array
+    // const results = await Promise.all(names.map(asyncTask));
+
+    generateCharacters(names).then((characters) => {
+      console.log("Results:", JSON.stringify(characters, null, 2));
+      res.json(characters); // responds with a JSON array
+    });
   } catch (error) {
     // error handling: async task failure
     console.error("Error processing names:", error);
@@ -48,3 +43,12 @@ process.on("SIGINT", () => {
     process.exit(0);
   });
 });
+
+// Simulated async task: returns name with delay
+// const asyncTask = async (name) => {
+//   return new Promise((resolve) => {
+//     setTimeout(() => {
+//       resolve(`Processed: ${name}`);
+//     }, 500); // simulate 500ms delay
+//   });
+// };
