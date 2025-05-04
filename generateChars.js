@@ -113,7 +113,7 @@ const callWithRetry = async (
     const text = res.choices[0].message.content.trim();
 
     // log it out
-    console.log(`generate ${key} - ${attempt} = ${text}`);
+    console.log(`generate ${key} - ${attempt} = ${text}\n---`);
 
     try {
       // Try to parse response
@@ -124,11 +124,11 @@ const callWithRetry = async (
         // clean array content; remove "- " prefix and trim whitespace
         const cleaned = parsed.map((item) => item.trim().replace(/^- /, ""));
 
-        console.log(`schema array:`, cleaned);
+        console.log(`schema array:`, cleaned, `\n---`);
         return schema.parse(cleaned);
       }
 
-      console.log(`schema text:`, text);
+      // console.log(`schema text:`, text);
       return schema.parse(text);
     } catch (e) {
       console.warn(`Validation failed (attempt ${attempt}):`, e.message);

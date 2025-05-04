@@ -18,10 +18,12 @@ app.get("/naruto", async (req, res) => {
 
   try {
     // const results = await Promise.all(names.map(asyncTask));
+    console.log("Names to process:", names);
 
     generateCharacters(names).then((characters) => {
+      // TODO: this log outputs weird data sometimes, no idea why
       console.log("Results:", JSON.stringify(characters, null, 2));
-      res.json(characters); // responds with a JSON array
+      res.json(characters); // responds with a JSON array = works GOOD
     });
   } catch (error) {
     // error handling: async task failure
