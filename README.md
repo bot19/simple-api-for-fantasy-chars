@@ -1,30 +1,24 @@
-# repo-template-base
+# simple-api-for-fantasy-chars
 
-Fresh repo with baseline README (my template), package.json &amp; .gitignore; ready for build!
-
-Tip: setup Git user per project vs global. Set each time:
-`git config user.name "bot19"`
-`git config user.email "your@email.com"`
+Using node, express, chatgpt, zod, create a simple server with an endpoint to create fantasy characters
 
 ## 🏁 Features/objectives
 
-1. Point one
-2. Point two
-3. Point three
+1. an express server that will take query params: `url?names=fred,owen,john`
+2. using chatgpt + zod, generate fantasy profiles for each name
+3. return the data as an array of JSON objects
 
 ## 🖥️ Tech
 
-1. Gatsby.js `v5.5` (react, TS, GraphQL)
-2. Tailwind CSS `v3.3` (fast styling with utility-first CSS framework)
-3. highlight.js `v11.9` (code content syntax highlighting)
+1. node `v22.14`
+2. express `v5.1`
+3. chatgpt
+4. zod
 
 ## 🚀 How to run
 
-1. Fork &amp; clone this repo
-2. Make sure you have Node `v18`, in terminal go to DIR &amp; run `yarn`
-3. On successful installation, run `yarn develop`
+1. ...
 
 ## 📝 Notes
 
-- Any issues, questions or suggestions, let me know via github
-- Plans for future development, but could be a while...
+- ...
