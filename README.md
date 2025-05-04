@@ -17,7 +17,8 @@ Using node, express, chatgpt, zod, create a simple server with an endpoint to cr
 
 ## 🚀 How to run
 
-1. ...
+1. run server: `node server.js`
+2. stop server: `ctrl C`
 
 ## 📝 Notes
 
