@@ -10,13 +10,14 @@ const openai = new OpenAI({
 
 // === Individual Zod Validators ===
 
+// TODO: can improve validation
 const zNickname = z.string().min(3);
 const zRank = z.string();
 const zVillage = z.string();
 const zNatureAffinity = z.array(z.string().min(2));
 const zUniqueAbilities = z.array(z.string().min(2));
 const zFeats = z.array(z.string().min(2));
-const zBackground = z.string().min(10);
+// const zBackground = z.string().min(10);
 
 const zArray = [zNatureAffinity, zUniqueAbilities, zFeats];
 
@@ -30,7 +31,7 @@ const CharacterSchema = z.object({
   natureAffinity: zNatureAffinity,
   uniqueAbilities: zUniqueAbilities,
   feats: zFeats,
-  background: zBackground,
+  // background: zBackground,
 });
 
 // === Internal Config Per Query ===
@@ -82,13 +83,14 @@ const QUERY_CONFIG = {
     model: "gpt-4o-mini",
     max_tokens: 200,
   },
-  background: {
-    prompt: (charDescription) =>
-      `Write a short backstory for the Naruto character: ${charDescription}. Keep it to around 50-75 words.`,
-    schema: zBackground,
-    model: "gpt-4o-mini",
-    max_tokens: 300,
-  },
+  // TODO: for accuracy would need context of all previous fields, do later.
+  // background: {
+  //   prompt: (charDescription) =>
+  //     `Write a short backstory for the Naruto character: ${charDescription}. Keep it to around 50-75 words.`,
+  //   schema: zBackground,
+  //   model: "gpt-4o-mini",
+  //   max_tokens: 300,
+  // },
 };
 
 // === Utility: Call ChatGPT with Retry and Validation ===
