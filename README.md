@@ -19,6 +19,7 @@ Using node, express, chatgpt, zod, create a simple server with an endpoint to cr
 
 1. run server: `node server.js`
 2. stop server: `ctrl C`
+3. `curl "http://localhost:3000/naruto?names=Toby,Susaku,Rizen"`
 
 ## 📝 Notes
 

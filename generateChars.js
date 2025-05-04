@@ -18,6 +18,8 @@ const zUniqueAbilities = z.array(z.string().min(2));
 const zFeats = z.array(z.string().min(2));
 const zBackground = z.string().min(10);
 
+const zArray = [zNatureAffinity, zUniqueAbilities, zFeats];
+
 // === Combined Zod Schema ===
 
 const CharacterSchema = z.object({
@@ -36,17 +38,17 @@ const CharacterSchema = z.object({
 const QUERY_CONFIG_INITIAL = {
   nickname: {
     prompt: (name) =>
-      `Give a cool, impressive Naruto-style nickname for a character named "${name}".`,
+      `Give a cool, impressive Naruto-style nickname for a character named "${name}". Just the nickname, no other text or explanation.`,
     schema: zNickname,
     model: "gpt-4o-mini",
     max_tokens: 50,
   },
   rank: {
     prompt: (name) =>
-      `What would be the Naruto-style ninja rank of a character named "${name}"?`,
+      `What would be the Naruto-style ninja rank of a character named "${name}"? Just the rank, no other text or explanation.`,
     schema: zRank,
     model: "gpt-4o-mini",
-    max_tokens: 10,
+    max_tokens: 20,
   },
 };
 
@@ -54,38 +56,38 @@ const QUERY_CONFIG_INITIAL = {
 const QUERY_CONFIG = {
   village: {
     prompt: (charDescription) =>
-      `What Naruto village would suit the character: ${charDescription}?`,
+      `What Naruto village would suit the character: ${charDescription}? Return just the village name, no other text or explanation.`,
     schema: zVillage,
     model: "gpt-4o-mini",
     max_tokens: 20,
   },
   natureAffinity: {
     prompt: (charDescription) =>
-      `What Naruto-style chakra nature affinities would ${charDescription} have? Return as a comma separated list. Low rank characters should have 1-2 affinities, while high rank characters can have 3-4 affinities.`,
+      `What Naruto-style chakra nature affinities would ${charDescription} have? Low rank characters should have 1-2 affinities, while high rank characters can have 3-4 affinities. Return as a comma separated list. No other text or explanation.`,
     schema: zNatureAffinity,
     model: "gpt-4o-mini",
     max_tokens: 100,
   },
   uniqueAbilities: {
     prompt: (charDescription) =>
-      `List unique jutsus or abilities that ${charDescription} would have in the Naruto world. Return as a comma separated list. Low rank characters should have 1-2 abilities, while high rank characters can have 3-4 abilities.`,
+      `List unique jutsus or abilities that ${charDescription} would have in the Naruto world. Low rank characters should have 1-2 abilities, while high rank characters can have 3-4 abilities. Return as a comma separated list. No other text or explanation.`,
     schema: zUniqueAbilities,
     model: "gpt-4o-mini",
     max_tokens: 100,
   },
   feats: {
     prompt: (charDescription) =>
-      `Describe notable feats or accomplishments of ${charDescription} in the Naruto world. Return as a list, where each feat/accomplishment is separated by a newline. Low rank characters should have 1-2 feats, while high rank characters can have 3-4 feats.`,
+      `Describe notable feats or accomplishments of ${charDescription} in the Naruto world. Low rank characters should have 1-2 feats, while high rank characters can have 3-4 feats. Return as a list, where each feat/accomplishment is separated by a newline. No other text or explanation.`,
     schema: zFeats,
     model: "gpt-4o-mini",
     max_tokens: 200,
   },
   background: {
     prompt: (charDescription) =>
-      `Write a short backstory for the Naruto character: ${charDescription}. Keep it to around 50 words.`,
+      `Write a short backstory for the Naruto character: ${charDescription}. Keep it to around 50-75 words.`,
     schema: zBackground,
     model: "gpt-4o-mini",
-    max_tokens: 200,
+    max_tokens: 300,
   },
 };
 
@@ -113,11 +115,13 @@ const callWithRetry = async (
 
     try {
       // Try to parse response
-      if (schema === z.array(z.string())) {
+      if (zArray.includes(schema)) {
         // regex: split by comma or newline, and filter out empty strings
         const parsed = text.split(/,\s*|\n/).filter(Boolean);
+        console.log(`schema array:`, parsed);
         return schema.parse(parsed);
       }
+      console.log(`schema text:`, text);
       return schema.parse(text);
     } catch (e) {
       console.warn(`Validation failed (attempt ${attempt}):`, e.message);
