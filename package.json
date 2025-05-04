@@ -2,6 +2,7 @@
   "name": "repo-template-base",
   "version": "1.0.0",
   "description": "Fresh repo with baseline README (my template), package.json &amp; .gitignore; ready for build!",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -16,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/bot19/repo-template-base/issues"
   },
-  "homepage": "https://github.com/bot19/repo-template-base#readme"
+  "homepage": "https://github.com/bot19/repo-template-base#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
 }
