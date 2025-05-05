@@ -39,49 +39,49 @@ const CharacterSchema = z.object({
 const QUERY_CONFIG_INITIAL = {
   nickname: {
     prompt: (name) =>
-      `Give a cool, impressive Naruto-style nickname for a character named "${name}". Just the nickname, no other text or explanation.`,
+      `Give a cool, impressive Naruto-style nickname for a character named "${name}". Just the nickname, no other text or explanation. Don't need to include their name again.`,
     schema: zNickname,
     model: "gpt-4o-mini",
     max_tokens: 50,
   },
   rank: {
     prompt: (name) =>
-      `What would be the Naruto-style ninja rank of a character named "${name}"? Just the rank, no other text or explanation.`,
+      `Pick a rank for ${name} (one of the following): "Genin", "Chunin", "Special Jonin", "Jonin", "Anbu", "Kage", "Sage". Just the rank (without quotes), no other text or explanation.`,
     schema: zRank,
     model: "gpt-4o-mini",
     max_tokens: 20,
+  },
+  village: {
+    prompt: (charDescription) =>
+      `What Naruto village would suit the character: ${charDescription}? With no other text or explanation, return one of the following (without quotes): "Village Hidden in the Leaves, Konohagakure", "Village Hidden in the Sand, Sunagakure", "Village Hidden in the Mist, Kirigakure", "Village Hidden in the Cloud, Kumogakure", "Village Hidden in the Stones, Iwagakure", "Village Hidden in the Rain, Amegakure", "Village Hidden in the Sound, Otogakure"`,
+    schema: zVillage,
+    model: "gpt-4o-mini",
+    max_tokens: 25,
   },
 };
 
 // charDescription = `${name} ("${result.nickname}", of rank ${result.rank})`
 const QUERY_CONFIG = {
-  village: {
-    prompt: (charDescription) =>
-      `What Naruto village would suit the character: ${charDescription}? Return just the village name, no other text or explanation.`,
-    schema: zVillage,
-    model: "gpt-4o-mini",
-    max_tokens: 20,
-  },
   natureAffinity: {
     prompt: (charDescription) =>
-      `What Naruto-style chakra nature affinities would ${charDescription} have? Low rank characters should have 1-2 affinities, while high rank characters can have 3-4 affinities. Return as a list with each on a new line. No other text or explanation.`,
+      `What Naruto-style chakra nature affinities would ${charDescription} have? If they are ranked Genin they should have 1 affinity, If they are ranked Chunin or Special Jonin they should have 1-2 affinities, If they are ranked Jonin or Anbu they should have 1-3 affinities, If they are ranked Kage or Sage they should have 2-5 affinities. Return as a list with each on a new line. No other text or explanation. Pick from: "Fire, Wind, Lightning, Earth, Water" or more advanced: "Wood, Ice, Lava, Steel, Sand"`,
     schema: zNatureAffinity,
     model: "gpt-4o-mini",
     max_tokens: 100,
   },
   uniqueAbilities: {
     prompt: (charDescription) =>
-      `List unique jutsus or abilities that ${charDescription} would have in the Naruto world. Low rank characters should have 1-2 abilities, while high rank characters can have 3-4 abilities. Return as a list with each on a new line. No other text or explanation.`,
+      `List unique jutsus or abilities that ${charDescription} would have in the Naruto world. If they are ranked Genin they should have 1-2 abilities, If they are ranked Chunin or Special Jonin they should have 2-3 abilities, If they are ranked Jonin or Anbu they should have 3-5 abilities, If they are ranked Kage or Sage they should have 5-10 abilities. Return as a list with each on a new line. No other text or explanation.`,
     schema: zUniqueAbilities,
     model: "gpt-4o-mini",
-    max_tokens: 100,
+    max_tokens: 250,
   },
   feats: {
     prompt: (charDescription) =>
-      `Describe notable feats or accomplishments of ${charDescription} in the Naruto world. Low rank characters should have 1-2 feats, while high rank characters can have 3-4 feats. Return as a list with each on a new line. No other text or explanation.`,
+      `Describe notable feats or accomplishments of ${charDescription} in the Naruto world. If they are ranked Genin they should have 1 feat, If they are ranked Chunin or Special Jonin they should have 2 feats, If they are ranked Jonin or Anbu they should have 3-4 feats, If they are ranked Kage or Sage they should have 5-8 feats. Return as a list with each on a new line. No other text or explanation.`,
     schema: zFeats,
     model: "gpt-4o-mini",
-    max_tokens: 200,
+    max_tokens: 400,
   },
   // TODO: for accuracy would need context of all previous fields, do later.
   // background: {
@@ -159,7 +159,9 @@ export async function generateCharacter(name) {
     result[key] = value;
   }
 
-  const charDescription = `${name} ("${result.nickname}", of rank ${result.rank})`;
+  const charDescription = `${name} ("${result.nickname}", rank: ${result.rank}, from: ${result.village})`;
+
+  console.log(`charDescription:`, charDescription, `\n---`);
 
   for (const [key, config] of Object.entries(QUERY_CONFIG)) {
     const prompt = config.prompt(charDescription);
