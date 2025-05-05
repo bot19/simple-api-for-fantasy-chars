@@ -23,4 +23,7 @@ Using node, express, chatgpt, zod, create a simple server with an endpoint to cr
 
 ## 📝 Notes
 
-- ...
+- don't forget your `.env` and `OPENAI_API_KEY`
+- output a bit inconsistent, ie: Chūnin vs Chuunin, Fire Release vs Fire
+- can be improved by providing a complete list to be chosen from
+- bonus: feed all data back to get better background information
