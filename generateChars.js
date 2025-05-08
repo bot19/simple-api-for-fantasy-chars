@@ -37,26 +37,28 @@ const CharacterSchema = z.object({
 // === Internal Config Per Query ===
 
 const QUERY_CONFIG_INITIAL = {
-  nickname: {
-    prompt: (name) =>
-      `Give a cool, impressive Naruto-style nickname for a character named "${name}". Just the nickname, no other text or explanation. Don't need to include their name again.`,
-    schema: zNickname,
-    model: "gpt-4o-mini",
-    max_tokens: 50,
-  },
   rank: {
-    prompt: (name) =>
-      `Pick a rank for ${name} (one of the following): "Genin", "Chunin", "Special Jonin", "Jonin", "Anbu", "Kage", "Sage". Just the rank (without quotes), no other text or explanation.`,
+    prompt: `Pick a rank from the following list: "Genin", "Chunin", "Special Jonin", "Jonin", "Anbu", "Kage", "Sage". Just the rank (without quotes), no other text or explanation.`,
     schema: zRank,
     model: "gpt-4o-mini",
     max_tokens: 20,
   },
   village: {
-    prompt: (charDescription) =>
-      `What Naruto village would suit the character: ${charDescription}? With no other text or explanation, return one of the following (without quotes): "Village Hidden in the Leaves, Konohagakure", "Village Hidden in the Sand, Sunagakure", "Village Hidden in the Mist, Kirigakure", "Village Hidden in the Cloud, Kumogakure", "Village Hidden in the Stones, Iwagakure", "Village Hidden in the Rain, Amegakure", "Village Hidden in the Sound, Otogakure"`,
+    prompt: `Pick a village from the following list: "Village Hidden in the Leaves, Konohagakure", "Village Hidden in the Sand, Sunagakure", "Village Hidden in the Mist, Kirigakure", "Village Hidden in the Cloud, Kumogakure", "Village Hidden in the Stones, Iwagakure", "Village Hidden in the Rain, Amegakure", "Village Hidden in the Sound, Otogakure". Include no other text or explanation, exclude the quotes.`,
     schema: zVillage,
     model: "gpt-4o-mini",
     max_tokens: 25,
+  },
+};
+
+// doing unique things with these promps
+const QUERY_CONFIG_UNIQUE = {
+  nickname: {
+    prompt: (charDescription) =>
+      `Give a Naruto-style nickname for a character: ${charDescription}. The higher their rank, the more impressive the nickname should be; going from lowest to highest rank: "Genin", "Chunin", "Special Jonin", "Jonin", "Anbu", "Kage", "Sage". Their nickname should reflect their village or characters/affinities/abilities from that village. The nickname should be short and catchy, ideally 2-5 words. Return only the nickname. No other text or explanation. Don't need to include their name again.`,
+    schema: zNickname,
+    model: "gpt-4o-mini",
+    max_tokens: 50,
   },
 };
 
@@ -64,11 +66,12 @@ const QUERY_CONFIG_INITIAL = {
 const QUERY_CONFIG = {
   natureAffinity: {
     prompt: (charDescription) =>
-      `What Naruto-style chakra nature affinities would ${charDescription} have? If they are ranked Genin they should have 1 affinity, If they are ranked Chunin or Special Jonin they should have 1-2 affinities, If they are ranked Jonin or Anbu they should have 1-3 affinities, If they are ranked Kage or Sage they should have 2-5 affinities. Return as a list with each on a new line. No other text or explanation. Pick from: "Fire, Wind, Lightning, Earth, Water" or more advanced: "Wood, Ice, Lava, Steel, Sand"`,
+      `What Naruto-style chakra nature affinities would ${charDescription} have? Going from lowest to highest rank: If they are ranked Genin they should have 1 affinity, If they are ranked Chunin or Special Jonin they should have 1-2 affinities, If they are ranked Jonin or Anbu they should have 1-3 affinities, If they are ranked Kage or Sage they should have 2-5 affinities. However, you should take their nickname into consideration. For example: even if they are a Kage or Sage, if their nickname has the world "flame" they might only need 1-2 affinities related to "fire" or "lava". If their nickname is more affinity agnostic, feel free to give them multiple affinities. Return as a list with each on a new line. No other text or explanation. Pick from: "Fire, Wind, Lightning, Earth, Water" or more advanced (for higher ranks): "Wood, Ice, Lava, Steel, Sand"`,
     schema: zNatureAffinity,
     model: "gpt-4o-mini",
     max_tokens: 100,
   },
+  // TODO: abilities + feats should take into account affinities.
   uniqueAbilities: {
     prompt: (charDescription) =>
       `List unique jutsus or abilities that ${charDescription} would have in the Naruto world. If they are ranked Genin they should have 1-2 abilities, If they are ranked Chunin or Special Jonin they should have 2-3 abilities, If they are ranked Jonin or Anbu they should have 3-5 abilities, If they are ranked Kage or Sage they should have 5-10 abilities. Return as a list with each on a new line. No other text or explanation.`,
@@ -146,12 +149,11 @@ const callWithRetry = async (
 export async function generateCharacter(name) {
   const result = { name };
 
-  // get nickname and rank first - enable build richer char profile
+  // (1) get rank + village - enable build richer char profile
   for (const [key, config] of Object.entries(QUERY_CONFIG_INITIAL)) {
-    const prompt = config.prompt(name);
     const value = await callWithRetry(
       key,
-      prompt,
+      config.prompt,
       config.schema,
       config.model,
       config.max_tokens
@@ -159,10 +161,27 @@ export async function generateCharacter(name) {
     result[key] = value;
   }
 
-  const charDescription = `${name} ("${result.nickname}", rank: ${result.rank}, from: ${result.village})`;
+  const charRankVillage = `${name} (rank: ${result.rank}, from: ${result.village})`;
+
+  // (2) from rank + village, get nickname
+  // rank affects nickname impressiveness + village - affinities
+  const key = "nickname";
+  const config = QUERY_CONFIG_UNIQUE[key];
+  result[key] = await callWithRetry(
+    key,
+    config.prompt(charRankVillage),
+    config.schema,
+    config.model,
+    config.max_tokens
+  );
+
+  // (3) get nature affinities to pass into abilities + feats
+
+  const charDescription = `${name} (nickname: "${result.nickname}", rank: ${result.rank}, from: ${result.village})`;
 
   console.log(`charDescription:`, charDescription, `\n---`);
 
+  // (4) finally, from all details so far, get abilities + feats
   for (const [key, config] of Object.entries(QUERY_CONFIG)) {
     const prompt = config.prompt(charDescription);
     const value = await callWithRetry(
