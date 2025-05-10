@@ -1,6 +1,6 @@
 import express from "express";
 import { generateCharacters } from "./generateChars.js";
-import { generateWords } from "./generateWords.js";
+import { generateDefs } from "./generateDefs.js";
 
 const app = express();
 const PORT = 3001;
@@ -39,7 +39,7 @@ app.get("/naruto", async (req, res) => {
 });
 
 app.get("/words", async (req, res) => {
-  return await handleRequest(req, res, generateWords);
+  return await handleRequest(req, res, generateDefs);
 });
 
 // Assign the server instance
