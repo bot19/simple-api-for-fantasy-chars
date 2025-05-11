@@ -106,11 +106,11 @@ const getMeanings = async (word) => {
   const result = await callWithRetry(callParams);
 
   return result.map((meaning) => {
-    const [partOfSpeech, defintion] = meaning.split("|").map((s) => s.trim());
+    const [partOfSpeech, definition] = meaning.split("|").map((s) => s.trim());
 
     return {
       partOfSpeech,
-      defintion,
+      definition,
     };
   });
 };
@@ -164,7 +164,7 @@ const getInflectons = async (word) => {
 const getExample = async (wordDefinition) => {
   const callParams = {
     key: "getExample",
-    prompt: `For the word: ${wordDefinition}, give me a clear, English-UK ESL-friendly example phrase. Keep it simple and easy to understand. Ouput example phrase only, nothing else.`,
+    prompt: `For the word: ${wordDefinition}, give me a clear, English-UK ESL-friendly example phrase that uses the word correctly, matching its part of speech and form. Keep it simple and easy to understand. Ouput example phrase only, nothing else.`,
     schema: z.string().min(3),
     model: "gpt-4o-mini",
     max_tokens: 100,
@@ -216,9 +216,9 @@ export async function generateDefinition(word) {
   for (const simpleMeaning of simpleMeanings) {
     const meaning = {
       partOfSpeech: simpleMeaning.partOfSpeech,
-      definition: simpleMeaning.defintion,
+      definition: simpleMeaning.definition,
       example: await getExample(
-        `${word} (${simpleMeaning.partOfSpeech}) as in "${simpleMeaning.defintion}"`
+        `${word} (${simpleMeaning.partOfSpeech}) as in "${simpleMeaning.definition}"`
       ),
     };
 

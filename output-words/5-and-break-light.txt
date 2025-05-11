@@ -1,0 +1,19 @@
+prompt: `Give me a concise list **semantically distinct** core meanings for the word "${word}", as you would find in an English-UK ESL dictionary (at least 1; can be 2, 3, 4 or max 5). Only include meanings that are genuinely different in purpose or function — do not list examples that differ only in grammar or context. If there is only one such meaning, return just that. Format each meaning as: partOfSpeech|examplePhrase\n`,
+
+model: "gpt-4.1-mini-2025-04-14",
+
+giving me: 
+
+'conjunction|bread and butter'
+
+'noun|the natural agent that makes things visible',
+'adjective|having little weight or less than usual weight',
+'verb|to start a fire or make something burn',
+'noun|a source of illumination, such as a lamp or bulb',
+'adjective|pale in colour or not dark'
+
+'verb|to separate into pieces suddenly or violently',
+'verb|to interrupt or stop an activity temporarily',
+'noun|a pause or rest period in work or activity',
+'verb|to fail to observe a rule or law',
+'verb|to make something known or public for the first time'
