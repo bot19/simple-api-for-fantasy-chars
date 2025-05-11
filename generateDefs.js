@@ -4,11 +4,18 @@ import { OpenAI } from "openai";
 
 config();
 
+/**
+ * models:
+ * "gpt-4o-mini"
+ * "gpt-4.1-mini-2025-04-14"
+ * "gpt-4.1-2025-04-14"
+ */
+
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const noContent = "no data available for this field";
+const noContent = "no data for field";
 
 // === Zod Validators + Types ===
 
@@ -21,7 +28,7 @@ const zMeaning = z.object({
   definition: z.string(),
   example: z.string(),
   note: z.string(),
-  synonyms: z.array(z.string()),
+  synonyms: z.array(z.string()).optional(),
 });
 
 const zDefinition = z.object({
@@ -30,7 +37,7 @@ const zDefinition = z.object({
   phonetics: z.object({
     simplified: z.string(),
   }),
-  wordFamily: z.array(z.string()),
+  inflections: z.array(z.string()).optional(),
   meanings: z.array(zMeaning),
 });
 
@@ -86,29 +93,29 @@ const callWithRetry = async ({
 
 // === Generate Fields ===
 
+// prompt: UPDATED
 const getMeanings = async (word) => {
   const callParams = {
     key: "getMeanings",
-    prompt: `Give me a concise list of the core meanings for the word "${word}" as you would find in an English-UK ESL dictionary. Limit it to only the most common, clearly distinct meanings. Do not repeat similar uses or closely related senses. Use just one entry per true meaning, and avoid breaking it into multiple slight variations. Include one short, disambiguating example phrase per entry. Avoid slang, idioms, or edge cases. Be conservative: if a word has only one main use, return only that. Output format for each meaning: partOfSpeech|examplePhrase\n`,
+    prompt: `Give me a concise list **semantically distinct** core meanings for the word "${word}", as you would find in an English-UK ESL dictionary (at least 1; can be 2, 3, 4 or max 5). Only include meanings that are genuinely different in purpose or function — do not list ones that differ only in grammar or context. If there is only one such meaning, return just that. For each meaning output in this format, keep it simple and easy to understand: partOfSpeech|meaning\n`,
     schema: z.array(z.string().min(3)),
-    model: "gpt-4o-mini",
+    model: "gpt-4.1-mini-2025-04-14",
     max_tokens: 500,
   };
 
   const result = await callWithRetry(callParams);
 
   return result.map((meaning) => {
-    const [partOfSpeech, examplePhrase] = meaning
-      .split("|")
-      .map((s) => s.trim());
+    const [partOfSpeech, defintion] = meaning.split("|").map((s) => s.trim());
 
     return {
       partOfSpeech,
-      examplePhrase,
+      defintion,
     };
   });
 };
 
+// prompt: GOOD
 const getRank = async (word) => {
   const callParams = {
     key: "getRank",
@@ -123,6 +130,7 @@ const getRank = async (word) => {
   return Number(result);
 };
 
+// prompt: GOOD
 const getSimplifiedPhonetic = async (word) => {
   const callParams = {
     key: "getSimplifiedPhonetic",
@@ -137,12 +145,13 @@ const getSimplifiedPhonetic = async (word) => {
   return result;
 };
 
-const getWordFamily = async (word) => {
+// prompt: GOOD
+const getInflectons = async (word) => {
   const callParams = {
-    key: "getWordFamily",
-    prompt: `for the word: ${word}; provide an optional list of related words or forms (Word Families or Derivatives). Don't include the word itself (${word}). Respond with a comma separated list of words or if there are no related words: ${noContent}`,
+    key: "getInflectons",
+    prompt: `For the word: ${word}; provide a comma-separated list of standard, grammatically correct inflected forms in modern English. Exclude incorrect, hypothetical, or nonstandard forms. If there are no inflected forms, return: ${noContent}`,
     schema: z.string().regex(/^[a-z\-,’' ]+$/i),
-    model: "gpt-4o-mini",
+    model: "gpt-4.1-mini-2025-04-14",
     max_tokens: 150,
   };
 
@@ -151,10 +160,11 @@ const getWordFamily = async (word) => {
   return result.split(",").map((w) => w.trim().toLowerCase());
 };
 
-const getDefinition = async (wordDescription) => {
+// prompt: GOOD
+const getExample = async (wordDefinition) => {
   const callParams = {
-    key: "getDefinition",
-    prompt: `For the word: ${wordDescription}, give me a clear, English-UK ESL-friendly definition. Just the definition part, don't need to include the word and part of speech again. Keep it simple and easy to understand.`,
+    key: "getExample",
+    prompt: `For the word: ${wordDefinition}, give me a clear, English-UK ESL-friendly example phrase. Keep it simple and easy to understand. Ouput example phrase only, nothing else.`,
     schema: z.string().min(3),
     model: "gpt-4o-mini",
     max_tokens: 100,
@@ -165,6 +175,7 @@ const getDefinition = async (wordDescription) => {
   return result;
 };
 
+// prompt: GOOD
 const getHelpfulNote = async (wordDescription) => {
   const callParams = {
     key: "getHelpfulNote",
@@ -179,10 +190,11 @@ const getHelpfulNote = async (wordDescription) => {
   return result;
 };
 
+// prompt: GOOD
 const getSynonyms = async (wordDescription) => {
   const callParams = {
     key: "getSynonyms",
-    prompt: `Give me a list of synonyms for the word ${wordDescription}. Respond with a comma separated list of those synonyms or if there are no synonyms: "${noContent}" (no quotes). Avoid punctuation (don't want phrases) except for the comma to separate the synonyms.`,
+    prompt: `Give me a list of synonyms for the word ${wordDescription}. Respond with a comma separated list of those synonyms or if there are no synonyms return: ${noContent}. Avoid punctuation (don't want phrases) except for the comma to separate the synonyms.`,
     schema: z.string().regex(/^[a-z\-,’' ]+$/i),
     model: "gpt-4o-mini",
     max_tokens: 150,
@@ -202,15 +214,24 @@ export async function generateDefinition(word) {
   const meanings = [];
 
   for (const simpleMeaning of simpleMeanings) {
-    const wordDescription = `${word} (${simpleMeaning.partOfSpeech}) as in "${simpleMeaning.examplePhrase}`;
-
     const meaning = {
       partOfSpeech: simpleMeaning.partOfSpeech,
-      example: simpleMeaning.examplePhrase,
-      definition: await getDefinition(wordDescription),
-      note: await getHelpfulNote(wordDescription),
-      synonyms: await getSynonyms(wordDescription),
+      definition: simpleMeaning.defintion,
+      example: await getExample(
+        `${word} (${simpleMeaning.partOfSpeech}) as in "${simpleMeaning.defintion}"`
+      ),
     };
+
+    const wordDescription = `${word} (${simpleMeaning.partOfSpeech}) as in "${meaning.example}"`;
+
+    // after: note
+    meaning.note = await getHelpfulNote(wordDescription);
+
+    // optional: synonyms
+    const synonyms = await getSynonyms(wordDescription);
+    if (synonyms[0] !== noContent) {
+      meaning.synonyms = synonyms;
+    }
 
     meanings.push(zMeaning.parse(meaning));
   }
@@ -223,9 +244,15 @@ export async function generateDefinition(word) {
     phonetics: {
       simplified: await getSimplifiedPhonetic(word),
     },
-    wordFamily: await getWordFamily(word),
     meanings,
   };
+
+  // optional: inflections
+  const rawInflections = await getInflectons(word);
+  const inflections = rawInflections.filter((w) => w !== word);
+  if (inflections[0] !== noContent) {
+    definition.inflections = inflections;
+  }
 
   return zDefinition.parse(definition); // Final full validation
 }

@@ -55,12 +55,3 @@ process.on("SIGINT", () => {
     process.exit(0);
   });
 });
-
-// Simulated async task: returns name with delay
-// const asyncTask = async (name) => {
-//   return new Promise((resolve) => {
-//     setTimeout(() => {
-//       resolve(`Processed: ${name}`);
-//     }, 500); // simulate 500ms delay
-//   });
-// };

@@ -8,6 +8,8 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+// TODO: best way to generate characters is to include prev field in next field prompt as data.
+
 // === Individual Zod Validators ===
 
 // TODO: can improve validation
