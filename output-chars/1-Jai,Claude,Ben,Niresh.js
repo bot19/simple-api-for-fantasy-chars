@@ -1,0 +1,83 @@
+const output = [
+  {
+    name: "Jai",
+    nickname: "Jai the Thunderclap Sage",
+    rank: "Chūnin",
+    village: "Kumogakure (Village Hidden in the Clouds)",
+    natureAffinity: ["Lightning", "Wind"],
+    uniqueAbilities: [
+      "Thunderclap Technique: A high-speed movement technique that creates thunderclap sounds as he moves, disorienting opponents.",
+      "Static Charge: Generates static electricity around his body to enhance his speed and reflexes.",
+      "Lightning Clone Jutsu: Creates clones made of lightning that can explode upon impact.",
+      "Storm Barrier: A defensive jutsu that creates a shield of swirling winds and lightning, repelling attacks.",
+    ],
+    feats: [
+      "Mastered advanced lightning-based jutsu, enabling him to create powerful storms in battle.",
+      "Successfully defended his village against a rogue ninja attack, using his speed and agility to outmaneuver opponents.",
+      "Developed a unique technique called Thunderclap Barrage, allowing him to strike multiple enemies in rapid succession with lightning-infused punches.",
+      "Taught younger ninjas in his village, enhancing their combat skills and inspiring the next generation of shinobi.",
+    ],
+  },
+  {
+    name: "Claude",
+    nickname: "Phantom Blaze Claude",
+    rank: "Chuunin",
+    village: "Sunagakure",
+    natureAffinity: ["Fire", "Wind", "Lightning"],
+    uniqueAbilities: [
+      "Phantom Blaze Technique: A fire-based ninjutsu that creates illusory flames to confuse opponents while dealing real damage.",
+      "Shadow Flicker: A quick movement technique that allows Claude to momentarily blend into the shadows, evading attacks and reappearing in a different location.",
+      "Ember Mirage: A genjutsu that distorts the perception of the environment, making it appear as if the battlefield is engulfed in flames, causing panic among enemies.",
+      "Scorching Whirlwind:",
+    ],
+    feats: [
+      "Successfully utilized advanced fire-style jutsu to create a powerful flame shield, protecting his allies from enemy attacks during a high-stakes mission.",
+      "Demonstrated impressive stealth and reconnaissance skills by infiltrating an enemy stronghold undetected to gather valuable intel.",
+      "Developed a unique technique combining fire and wind techniques to enhance the power and range of his jutsu, surprising opponents in battle.",
+      "Led a team of Genin on a C-rank mission, effectively coordinating their efforts and ensuring a successful outcome while mitigating potential threats.",
+    ],
+  },
+  {
+    name: "Ben",
+    nickname: '"Blazing Falcon Ben"',
+    rank: "Chūnin.",
+    village: "Konohagakure",
+    natureAffinity: ["Fire Release", "Wind Release", "Lightning Release"],
+    uniqueAbilities: [
+      "Fire Release: Blazing Falcon Jutsu",
+      "Flame Wings Technique",
+      "Phoenix Fire Clone Jutsu",
+      "Celestial Blaze Strike",
+    ],
+    feats: [
+      "Successfully led a team of Genin during a B-rank mission, demonstrating strong leadership skills.",
+      "Defeated a rogue ninja in a one-on-one battle using his unique Fire Release techniques.",
+      "Assisted in the defense of the Hidden Leaf Village against an invading force, coordinating with other Chūnin to protect civilians.",
+      "Developed a new Fire Release jutsu that enhances the range and intensity of his flames, increasing his effectiveness in battle.",
+    ],
+  },
+  {
+    name: "Niresh",
+    nickname: "Shadow Blaze Niresh",
+    rank: "Jonin",
+    village: "Sunagakure (Village Hidden in the Sand)",
+    natureAffinity: [
+      "Fire Release",
+      "Shadow Release",
+      "Lightning Release",
+      "Wind Release",
+    ],
+    uniqueAbilities: [
+      "Shadow Blaze Technique: A unique Fire and Shadow style jutsu that allows Niresh to manipulate shadows and create fiery constructs or attacks.",
+      "Shadow Clone Jutsu: A technique that enables Niresh to create tangible shadow clones that can attack or defend.",
+      "Ember Veil: A defensive technique that cloaks Niresh in a veil of flames, confusing opponents and providing protection.",
+      "Inferno Mirage: A high-level technique that creates illusory flames, allowing Niresh to distract or deceive enemies during",
+    ],
+    feats: [
+      "Successfully utilized advanced fire jutsu to create a powerful inferno that decimated a large enemy force during a crucial battle.",
+      "Developed a unique technique combining shadow manipulation with fire, allowing for stealthy ambushes and devastating attacks.",
+      "Collaborated with a team of Jonin to take down a rogue ninja who had been terrorizing neighboring villages for months, showcasing strategic combat skills.",
+      "Rescued a captured comrade from an enemy stronghold using stealth and tactical prowess, demonstrating his exceptional infiltration abilities.",
+    ],
+  },
+];
