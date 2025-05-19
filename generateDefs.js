@@ -134,7 +134,21 @@ const getRank = async (word) => {
 const getSimplifiedPhonetic = async (word) => {
   const callParams = {
     key: "getSimplifiedPhonetic",
-    prompt: `For the word "${word}": give an easy, phonetic-style rendering that mimics how native English speakers might 'sound it out' using (only) regular alphabet letters—especially useful for learners unfamiliar with IPA. Respond with only the phonetic word, no explanation.`,
+    prompt: `For the word "${word}": give an easy, phonetic-style rendering that mimics how native English-UK speakers might 'sound it out' using (only) regular alphabet letters—especially useful for learners unfamiliar with IPA. Respond with only the phonetic word, no explanation.`,
+    schema: z.string().min(1),
+    model: "gpt-4o-mini",
+    max_tokens: 20,
+  };
+
+  const result = await callWithRetry(callParams);
+
+  return result;
+};
+
+const getIpaPhonetic = async (word) => {
+  const callParams = {
+    key: "getIpaPhonetic",
+    prompt: `For the word "${word}": give the phonetic pronunciation of the word for English-UK, written using the International Phonetic Alphabet. Respond with only the phonetic word, no explanation.`,
     schema: z.string().min(1),
     model: "gpt-4o-mini",
     max_tokens: 20,
@@ -243,6 +257,7 @@ export async function generateDefinition(word) {
     },
     phonetics: {
       simplified: await getSimplifiedPhonetic(word),
+      ipa: await getIpaPhonetic(word),
     },
     meanings,
   };
