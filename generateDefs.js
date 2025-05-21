@@ -35,6 +35,7 @@ const zDefinition = z.object({
   word: z.string(),
   level: zLevel,
   phonetics: z.object({
+    ipa: z.string(),
     simplified: z.string(),
   }),
   inflections: z.array(z.string()).optional(),
@@ -148,7 +149,7 @@ const getSimplifiedPhonetic = async (word) => {
 const getIpaPhonetic = async (word) => {
   const callParams = {
     key: "getIpaPhonetic",
-    prompt: `For the word "${word}": give the phonetic pronunciation of the word for English-UK, written using the International Phonetic Alphabet. Respond with only the phonetic word, no explanation.`,
+    prompt: `For the word "${word}": give the phonetic pronunciation of the word for English-UK, written using the International Phonetic Alphabet. Respond with only the phonetic word between 2 /, like /ipa/, no explanation.`,
     schema: z.string().min(1),
     model: "gpt-4o-mini",
     max_tokens: 20,
@@ -256,8 +257,8 @@ export async function generateDefinition(word) {
       rank: await getRank(word),
     },
     phonetics: {
-      simplified: await getSimplifiedPhonetic(word),
       ipa: await getIpaPhonetic(word),
+      simplified: await getSimplifiedPhonetic(word),
     },
     meanings,
   };
