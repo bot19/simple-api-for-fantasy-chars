@@ -1,0 +1,31 @@
+const output = [
+  {
+    name: "Fil",
+    nickname: "Sandstorm Sage",
+    rank: "Sage",
+    village: "Village Hidden in the Sand, Sunagakure",
+    natureAffinity: ["Wind", "Earth", "Sand", "Fire"],
+    uniqueAbilities: [
+      "Sand Manipulation: Control and reshape sand for various offensive and defensive techniques.",
+      "Sandstorm Technique: Create powerful sandstorms that obscure vision and disorient opponents.",
+      "Desert Mirage: Create illusions using mirage techniques to mislead enemies.",
+      "Quicksand Technique: Transform regular sand into quicksand to trap unsuspecting foes.",
+      "Sand Armor: Form protective armor made of compressed sand to enhance defense.",
+      "Burrowing Sand Technique: Allow the user to move through sand as if it were water, enabling rapid movement.",
+      "Sage Mode: Enhanced sensory perception and physical capabilities while drawing chakra from nature.",
+      "Sand Barrier: Construct barriers made from sand to block attacks or contain enemies.",
+      "Sand Spikes: Create sharp spikes of sand that can be launched at enemies.",
+      "Desert Mastery: Enhanced abilities to manipulate sand and control desert-related jutsu.",
+    ],
+    feats: [
+      "1. Mastered advanced sand manipulation techniques, allowing for the creation of intricate sand constructs for defense and offense.",
+      "2. Developed a unique desert camouflage technique using sand to blend into the environment, enhancing stealth capabilities.",
+      "3. Successfully defended Sunagakure from an invading force by summoning a massive sandstorm that incapacitated enemy shinobi.",
+      "4. Trained several Genin in advanced sand techniques, significantly improving their combat effectiveness in the desert.",
+      "5. Formulated a strategy during the Fourth Great Ninja War that involved using sand for rapid defense and counter-attack, leading to pivotal victories.",
+      "6. Established diplomatic relations with the Hidden Leaf Village, promoting alliances through peace talks and sand-based cultural exchanges.",
+      "7. Discovered an ancient artifact buried in the desert that enhanced chakra manipulation, which she used to further refine her jutsu.",
+      "8. Helped in the preservation of Sunagakure’s secret jutsu by creating a comprehensive training program that involved historical knowledge and practical tests.",
+    ],
+  },
+];
