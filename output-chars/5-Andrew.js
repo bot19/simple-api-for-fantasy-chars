@@ -1,0 +1,31 @@
+const output = [
+  {
+    name: "Andrew",
+    nickname: "Sandstorm Phantom",
+    rank: "Kage",
+    village: "Village Hidden in the Sand, Sunagakure",
+    natureAffinity: ["Sand", "Wind", "Earth", "Fire", "Lightning"],
+    uniqueAbilities: [
+      "Sand Manipulation",
+      "Desert Mirage Technique",
+      "Sand Burial Technique",
+      "Phantom Sandstorm Technique",
+      "Wind Blade Jutsu",
+      "Sand Clone Technique",
+      "Sand Armor Technique",
+      "Elusive Sand Veil",
+      "Sandstorm Barrage",
+      "Oasis Creation Technique",
+    ],
+    feats: [
+      "1. Successfully negotiated a peace treaty between Sunagakure and Konoha after a series of border skirmishes, ensuring a lasting alliance.",
+      "2. Defeated a rogue ninja leader who threatened the stability of the Wind Country using strategic Sand manipulation techniques.",
+      "3. Obtained and mastered a unique Forbidden Jutsu that enhances Sand control, granting access to powerful desert-based attacks.",
+      "4. Led Sunagakure's military forces to victory against an invading enemy faction, showcasing exceptional leadership and tactical skills.",
+      "5. Formulated advanced defense strategies for Sunagakure, significantly reducing casualties during conflicts with rogue ninjas and other villages.",
+      "6. Trained a new generation of Sand ninja, including notable Genin teams, enhancing the village's overall combat capabilities.",
+      "7. Developed a groundbreaking Sand-based summoning technique, allowing for the summoning of powerful desert creatures to aid in battle.",
+      "8. Enhanced diplomatic relations with prominent villages through trade agreements that boosted Sunagakure’s economy and status.",
+    ],
+  },
+];
