@@ -179,7 +179,7 @@ const getInflectons = async (word) => {
 const getExample = async (wordDefinition) => {
   const callParams = {
     key: "getExample",
-    prompt: `For the word: ${wordDefinition}, give me a clear, English-UK ESL-friendly example phrase that uses the word correctly, matching its part of speech and form. Keep it simple and easy to understand. Ouput example phrase only, nothing else.`,
+    prompt: `For the word: ${wordDefinition}, give me a clear, English-UK ESL-friendly example phrase that uses the word correctly, matching its part of speech and form (not other inflected forms). Keep it simple and easy to understand. Output example phrase only, nothing else.`,
     schema: z.string().min(3),
     model: "gpt-4o-mini",
     max_tokens: 100,
