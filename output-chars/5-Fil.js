@@ -1,0 +1,30 @@
+const output = [
+  {
+    name: "Fil",
+    nickname: "Leaf's Eternal Flame",
+    rank: "Kage",
+    village: "Village Hidden in the Leaves, Konohagakure",
+    natureAffinity: ["Fire", "Wind", "Lightning", "Wood", "Lava"],
+    uniqueAbilities: [
+      "Eternal Flame Release: A unique fire technique that generates an unquenchable flame capable of burning through any material, even under water or extreme conditions.",
+      "Leaf's Guardian: A defensive technique that envelops allies in a protective barrier of flames, allowing them to absorb chakra from attacks.",
+      "Phoenix Rebirth: A technique that allows Fil to resurrect once after being defeated, emerging from the ashes with enhanced power and vitality.",
+      "Flame Manipulation: The ability to control and shape flames for offensive and defensive maneuvers, including creating weapons or shields made of fire.",
+      "Nature Infusion: The power to integrate plant life with fire techniques to create unique fire-infused flora that can attack or defend.",
+      "Eternal Resolve: An enhanced mental state that grants temporary immunity to genjutsu and strengthens resolve in battle, allowing Fil to push through pain and fatigue.",
+      "Blazing Path: A high-speed movement technique that leaves a trail of fire, allowing Fil to confuse opponents or create barriers of flame upon exit.",
+      "Fire Style: Great Fireball Technique: An advanced version of the traditional technique that allows Fil to launch an enormous fireball that explodes upon impact.",
+      "Inferno Wave: A massive wave of fire unleashed in a sweeping arc, devastating",
+    ],
+    feats: [
+      "1. Successfully led the Village Hidden in the Leaves during a major ninja war, ensuring its safety and stability.",
+      "2. Developed a unique Fire Release technique that greatly increased the potency and control of fire-based jutsus.",
+      "3. Formed alliances with neighboring villages to strengthen the defense and prosperity of Konohagakure.",
+      "4. Trained and mentored the next generation of ninja, significantly boosting their skills and teamwork.",
+      "5. Resolved a conflict between two clans within the village, promoting unity and cooperation among the villagers.",
+      "6. Fended off an invasion from a powerful rogue ninja group, demonstrating strategic acumen and strength in battle.",
+      "7. Played a critical role in the peace negotiations that led to a lasting truce among the five great shinobi nations.",
+      "8. Discovered and sealed an ancient forbidden jutsu, preventing it from falling into the wrong hands.",
+    ],
+  },
+];
