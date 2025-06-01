@@ -1,0 +1,31 @@
+const output = [
+  {
+    name: "Stebu",
+    nickname: "Leaf's Silent Shadow",
+    rank: "Kage",
+    village: "Village Hidden in the Leaves, Konohagakure",
+    natureAffinity: ["Wind", "Lightning", "Wood", "Earth", "Water"],
+    uniqueAbilities: [
+      "Shadow Leaf Techniques: Ability to manipulate shadows for stealth and silent movement.",
+      "Silent Step: A technique that allows Stebu to move without making any sound, enhancing his stealth capabilities.",
+      "Leaf's Mirage: Creates illusions of himself to confuse enemies during combat.",
+      "Shadow Binding Jutsu: Can bind opponents' movements using shadows, rendering them immobile temporarily.",
+      "Silent Killing Technique: An advanced assassination technique that enables Stebu to eliminate targets without detection.",
+      "Leaf's Veil: Generates a cloak of leaves that obscures him from sight and sound, providing camouflage in forested areas.",
+      "Shadow Clone Technique: Creates multiple copies of himself that can act independently for strategic advantages.",
+      "Nightwalker: An ability that grants enhanced speed and reflexes during nighttime or in dark environments.",
+      "Wind Blade Technique: Manipulates wind chakra to create sharp gusts that can cut enemies from a distance.",
+      "Ultimate Silent Shadow: An advanced transformation that enhances all stealth techniques, rendering him completely undetectable for a short time.",
+    ],
+    feats: [
+      "1. Successfully defended Konohagakure from an invasion by a rogue ninja faction, using tactical misdirection and guerrilla tactics.",
+      "2. Developed a unique shadow-based jutsu that allows for stealthy movement through the forest without being detected.",
+      "3. Negotiated a peace treaty between two feuding regions, utilizing skills in diplomacy and strategy.",
+      "4. Trained the next generation of shinobi in advanced stealth techniques and shadow manipulation.",
+      "5. Led a covert mission to retrieve classified information from a competing village, ensuring Konohagakure's strategic advantage.",
+      "6. Played a critical role in the defense against the Fourth Great Ninja War, leading a team to counter enemy infiltration.",
+      "7. Enhanced the village's security measures by implementing a network of shadow spies throughout the surrounding territories.",
+      "8. Rescued a trapped team of Shinobi from an ambush, utilizing his shadow abilities to create diversions and execute a successful escape.",
+    ],
+  },
+];
