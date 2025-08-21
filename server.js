@@ -1,12 +1,16 @@
 import express from "express";
 import { generateCharacters } from "./generateChars.js";
 import { generateDefs } from "./generateDefs.js";
+import { generateAudit } from "./generateAudit.js";
+import fs from "fs";
 
+// define server + details
 const app = express();
 const PORT = 3001;
 
 let server;
 
+// request handler
 const handleRequest = async (req, res, generator) => {
   const listParam = req.query.list;
 
@@ -34,12 +38,43 @@ const handleRequest = async (req, res, generator) => {
   }
 };
 
+// request handler for files
+const handleFileRequest = async (req, res, processor) => {
+  const fileInPath = req.query.in;
+  const fileOutPath = req.query.out;
+
+  if (!fileInPath || !fileOutPath) {
+    return res.status(400).send('Missing "in" or "out" query parameters.');
+  }
+
+  try {
+    // read file; limit to text data (not binary data)
+    const fileIn = fs.readFileSync(fileInPath, "utf8");
+
+    // process file
+    const processedFile = await processor(fileIn);
+
+    // write file; output JSON for easy js parsing
+    fs.writeFileSync(fileOutPath, processedFile);
+
+    res.send("File processed successfully");
+  } catch (error) {
+    console.error("Error processing file:", error);
+    res.status(500).send("Server error");
+  }
+};
+
+// define routes
 app.get("/naruto", async (req, res) => {
   return await handleRequest(req, res, generateCharacters);
 });
 
 app.get("/words", async (req, res) => {
   return await handleRequest(req, res, generateDefs);
+});
+
+app.get("/audit", async (req, res) => {
+  return await handleFileRequest(req, res, generateAudit);
 });
 
 // Assign the server instance
