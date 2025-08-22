@@ -2,6 +2,7 @@ import express from "express";
 import { generateCharacters } from "./generateChars.js";
 import { generateDefs } from "./generateDefs.js";
 import { generateAudit } from "./generateAudit.js";
+import { generateSpelling } from "./generateSpelling.js";
 import fs from "fs";
 
 // define server + details
@@ -75,6 +76,10 @@ app.get("/words", async (req, res) => {
 
 app.get("/audit", async (req, res) => {
   return await handleFileRequest(req, res, generateAudit);
+});
+
+app.get("/spelling", async (req, res) => {
+  return await handleFileRequest(req, res, generateSpelling);
 });
 
 // Assign the server instance
