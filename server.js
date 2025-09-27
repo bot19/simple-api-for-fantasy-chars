@@ -1,6 +1,7 @@
 import express from "express";
 import { generateCharacters } from "./generateChars.js";
 import { generateDefs } from "./generateDefs.js";
+import { generateDefsFast } from "./generateDefsFast.js";
 import { generateAudit } from "./generateAudit.js";
 import { generateSpelling } from "./generateSpelling.js";
 import fs from "fs";
@@ -72,6 +73,10 @@ app.get("/naruto", async (req, res) => {
 
 app.get("/words", async (req, res) => {
   return await handleRequest(req, res, generateDefs);
+});
+
+app.get("/wordsfast", async (req, res) => {
+  return await handleRequest(req, res, generateDefsFast);
 });
 
 app.get("/audit", async (req, res) => {
