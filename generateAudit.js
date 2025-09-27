@@ -8,25 +8,21 @@ config();
 const CONCURRENCY_LIMIT = 5;
 const CHAT_MODEL = "gpt-5-mini";
 const PROMPT = `
-  You are an expert in English language learning (think: The Oxford 3000).
-  For the given word, evaluate it's importance to ESL learners.
-  You need to return a rating between 0 and 3.
-  0 = not essential (to be removed from list), must give brief reason.
-  1 = essential = should know as part of your first 5000 essential English words.
-  2 = very essential = key/essential words for conversation and getting around.
-  3 = absolutely essential = first 1000 essential English words. To survive in English-speaking country.
-  other reasons to remove: slang, jargon, offensive, sexual, has punctuation that's not a "-", etc.
-  you only need to give the reason if the rating is 0.
-
-  Format your response exactly like this:
-  rating|why(if rating is 0)
-
-  Example:
+  You are an expert in ESL word evaluation (e.g., Oxford 3000).
+  For a given word, rate its importance to ESL learners:
+  0 = Not essential (remove; give short reason)
+  1 = Essential (top 5000)
+  2 = Very essential (top 3000;core for conversation/travel)
+  3 = Absolutely essential (top 1000; survival level)
+  Remove if slang, jargon, sexual, offensive, or includes punctuation (except hyphen).
+  Respond in this format:
+  rating|reason (if rating = 0)
+  Examples:
   3
-  0|Slang word, not useful for ESL learners
+  0|Slang, not useful for ESL learners
 
   Evaluate word:
-  `;
+`;
 
 // setup zod schema
 const zAudit = z.object({
@@ -52,17 +48,28 @@ const worker = async (word) => {
 // loop through words
 // run in parallel x5 - log output
 const processWithConcurrencyLimit = async (tasks, limit, worker) => {
-  const results = [];
-  let index = 0;
+  const results = new Array(tasks.length);
+  let currentIndex = 0;
+
+  const getNextTask = () => {
+    if (currentIndex >= tasks.length) {
+      return null;
+    }
+    return currentIndex++;
+  };
 
   const run = async () => {
-    while (index < tasks.length) {
-      const currentIndex = index++;
+    while (true) {
+      const taskIndex = getNextTask();
+      if (taskIndex === null) {
+        break;
+      }
+
       try {
-        const result = await worker(tasks[currentIndex]);
+        const result = await worker(tasks[taskIndex]);
         const resultEval = result.choices[0].message.content.split("|");
         const resultObj = {
-          word: tasks[currentIndex],
+          word: tasks[taskIndex],
           rating: parseInt(resultEval[0]),
         };
 
@@ -71,11 +78,14 @@ const processWithConcurrencyLimit = async (tasks, limit, worker) => {
         }
 
         // log out
-        console.log(`${JSON.stringify(resultObj)}\n`);
-        results[currentIndex] = zAudit.parse(resultObj);
+        console.log(`${JSON.stringify(resultObj)}`);
+        results[taskIndex] = zAudit.parse(resultObj);
       } catch (err) {
         console.error(`error: ${err}\n`);
-        results[currentIndex] = { error: err };
+        results[taskIndex] = {
+          word: tasks[taskIndex],
+          error: err,
+        };
       }
     }
   };
@@ -84,10 +94,13 @@ const processWithConcurrencyLimit = async (tasks, limit, worker) => {
   const workers = Array.from({ length: limit }, run);
   await Promise.all(workers);
 
-  // sort results alphabetically
-  results.sort((a, b) => a.word.localeCompare(b.word));
+  // Filter out any undefined results (shouldn't happen with proper implementation)
+  const validResults = results.filter((result) => result !== undefined);
 
-  return JSON.stringify(results, null, 2);
+  // sort results alphabetically
+  validResults.sort((a, b) => a.word.localeCompare(b.word));
+
+  return JSON.stringify(validResults, null, 2);
 };
 
 // processor; audit words; entry & exit
@@ -99,6 +112,8 @@ export const generateAudit = async (inputData) => {
       CONCURRENCY_LIMIT,
       worker
     );
+
+    console.log(`audit completed`);
     return audit;
   } catch (error) {
     console.error("Error in generateAudit:", error);
