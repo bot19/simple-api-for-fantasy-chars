@@ -94,13 +94,10 @@ const processWithConcurrencyLimit = async (tasks, limit, worker) => {
   const workers = Array.from({ length: limit }, run);
   await Promise.all(workers);
 
-  // Filter out any undefined results (shouldn't happen with proper implementation)
-  const validResults = results.filter((result) => result !== undefined);
-
   // sort results alphabetically
-  validResults.sort((a, b) => a.word.localeCompare(b.word));
+  results.sort((a, b) => a.word.localeCompare(b.word));
 
-  return JSON.stringify(validResults, null, 2);
+  return JSON.stringify(results, null, 2);
 };
 
 // processor; audit words; entry & exit
