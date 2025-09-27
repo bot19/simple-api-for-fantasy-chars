@@ -306,7 +306,7 @@ const processWithConcurrencyLimit = async (tasks, limit, worker) => {
         const endTime = Date.now();
         const duration = endTime - startTime;
         console.log(
-          `[Worker ${taskIndex}] Completed "${word}" in ${duration}ms`
+          `[Worker ${taskIndex}] Completed "${word}" in ${duration}ms\n---`
         );
 
         // log out
@@ -316,7 +316,7 @@ const processWithConcurrencyLimit = async (tasks, limit, worker) => {
         const endTime = Date.now();
         const duration = endTime - startTime;
         console.error(
-          `[Worker ${taskIndex}] Error with "${word}" after ${duration}ms: ${err}\n`
+          `[Worker ${taskIndex}] Error with "${word}" after ${duration}ms: ${err}\n---`
         );
         results[taskIndex] = {
           word: tasks[taskIndex],
@@ -359,10 +359,9 @@ export async function generateDefsFast(words) {
   const endTime = Date.now();
   const totalDuration = endTime - startTime;
   console.log(
-    `\n---------------------------------------\n
-    Total processing time: ${totalDuration}ms (${(totalDuration / 1000).toFixed(
-      2
-    )}s)`
+    `\n---------------------------------------\nTotal processing time: ${totalDuration}ms (${(
+      totalDuration / 1000
+    ).toFixed(2)}s)`
   );
   console.log(
     `Average time per word: ${(totalDuration / words.length).toFixed(2)}ms
