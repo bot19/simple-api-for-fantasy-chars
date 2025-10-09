@@ -9,6 +9,8 @@ config();
  * "gpt-4o-mini"
  * "gpt-4.1-mini-2025-04-14"
  * "gpt-4.1-2025-04-14"
+ *
+ * prompts sync with live edge function. Update here first.
  */
 
 const openai = new OpenAI({
@@ -222,7 +224,7 @@ const getSynonyms = async (wordDescription) => {
 
 // === Generate Definition ===
 
-export async function generateDefinition(word) {
+async function generateDefinition(word) {
   // get meanings/senses of word (1-many)
   const simpleMeanings = await getMeanings(word);
 
